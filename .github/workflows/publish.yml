@@ -1,0 +1,33 @@
+name: Publish to npmjs.org.
+run-name: ${{ github.actor }} publish ${{ github.ref_name }} to npmjs.org. 🚀🚀🚀
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+jobs:
+  publish:
+    name: Publish to npmjs.org
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install dependencies
+        run: npm i
+      - name: Run eslint
+        run: npm run lint
+      - name: Run prettier:check
+        run: npm run prettier:check
+      - name: Run test
+        run: npm run test:coverage
+      - name: Build
+        run: npm run build
+      - name: Publish ${{ github.ref_name }} to npmjs.org 🚀🚀🚀
+        run: npm publish
