@@ -7,6 +7,8 @@
 
 icloud-photos-share it make for retrieve information of share album of icloud photos that use for display on your website.
 
+*Support only nodejs
+
 ## How it work
 
 Use `Token` from Photos Share Album.
