@@ -48,6 +48,7 @@ export async function icloudPhotosShare(
       };
     }
     responseData.photos.push({
+      mediaAssetType: photo.mediaAssetType,
       derivatives,
     });
   }
