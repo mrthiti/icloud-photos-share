@@ -17,6 +17,7 @@ const mockGetWebstream: WebstreamResponse = {
   photos: [
     {
       photoGuid: "656EEA81-A5CE-425E-B528-22407B0940F3",
+      mediaAssetType: "mockMediaType",
       derivatives: {
         "2049": {
           fileSize: "702722",
@@ -51,7 +52,7 @@ describe("icloudPhotosShare() function", () => {
     jest.resetAllMocks();
   });
 
-  test("Give data from icloud correct, then should currect mediaUrl data.", async () => {
+  test("Give data from icloud correct, then should currect data.", async () => {
     const mockToken = "B1AG6XBub2QnCol";
     const mockPartition = "72";
     const expectScheme =
@@ -62,6 +63,7 @@ describe("icloudPhotosShare() function", () => {
       mockGetWebasseturls.items["01e7cfcf25ea502b67552bf64a4270fa2990e5cc79"]
         .url_path;
     const expectMediaUrl = `${expectScheme}://${expectHost}${expectUrlPath}`;
+    const expectMediaType = mockGetWebstream.photos[0].mediaAssetType;
 
     getPartitionFromToken.mockImplementation(() => mockPartition);
     getWebstream.mockImplementation(() => Promise.resolve(mockGetWebstream));
@@ -79,8 +81,11 @@ describe("icloudPhotosShare() function", () => {
       mockGetWebstream.photos.map((it: WebstreamPhoto) => it.photoGuid)
     );
     expect(
-      !actual.error && actual.data.photos.pop()?.derivatives["2049"].mediaUrl
+      !actual.error && actual.data.photos[0]?.derivatives["2049"].mediaUrl
     ).toBe(expectMediaUrl);
+    expect(!actual.error && actual.data.photos[0]?.mediaAssetType).toBe(
+      expectMediaType
+    );
   });
 
   test("Give getWebstream return null, then should return error is true", async () => {

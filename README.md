@@ -7,7 +7,7 @@
 
 icloud-photos-share it make for retrieve information of share album of icloud photos that use for display on your website.
 
-*Support only nodejs
+\*Support only nodejs
 
 ## How it work
 
@@ -68,6 +68,7 @@ import { icloudPhotosShare, type IcloudPhotosShareResponse } from 'icloud-photos
   "data": {
     "photos": [
       {
+        "mediaAssetType": "video",
         "derivatives": {
           "342": {
             "fileSize": "71512",
@@ -125,6 +126,8 @@ import { icloudPhotosShare, type IcloudPhotosShareResponse } from 'icloud-photos
   }
 }
 ```
+
+\*If media is video, field `mediaAssetType` will value is `video`
 
 ## License
 
