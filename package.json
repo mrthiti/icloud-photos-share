@@ -1,6 +1,6 @@
 {
   "name": "icloud-photos-share",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "It make for retrieve information of share album of icloud photos that use for display on your website.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
