@@ -127,7 +127,7 @@ import { icloudPhotosShare, type IcloudPhotosShareResponse } from 'icloud-photos
 }
 ```
 
-\*If media is video, field `mediaAssetType` will value is `video`
+\*If media is video, field `mediaAssetType` will value is `video`.
 
 ## License
 
