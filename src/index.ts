@@ -13,7 +13,7 @@ export async function icloudPhotosShare(
 ): Promise<IcloudPhotosShareResponse> {
   const partition = getPartitionFromToken(token);
 
-  const resWebstream = await getWebstream(partition, token);
+        const resWebstream = await getWebstream(partition, token);
   if (!resWebstream) {
     return Result.error("Not found.");
   }
