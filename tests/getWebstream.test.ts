@@ -92,4 +92,93 @@ describe("getWebstream() function", () => {
 
     expect(actual).toBe(null);
   });
+
+  test("Give Apple API move location (http status 330), then should return correct data.", async () => {
+    const mockPartition = "72";
+    const mockToken = "B1AG6XBub2QnCol";
+    const expectResponse: WebstreamResponse = {
+      photos: [
+        {
+          photoGuid: "656EEA81-A5CE-425E-B528-22407B0940F3",
+          derivatives: {
+            "2049": {
+              fileSize: "702722",
+              checksum: "01e7cfcf25ea502b67552bf64a4270fa2990e5cc79",
+              width: "1537",
+              height: "2049",
+            },
+          },
+        },
+      ],
+      newPartition: "179",
+    };
+
+    global.fetch = jest.fn((url) => {
+      if (
+        url ===
+        `https://p${mockPartition}-sharedstreams.icloud.com/${mockToken}/sharedstreams/webstream`
+      ) {
+        return Promise.resolve({
+          ok: false,
+          status: 330,
+          Headers: { "x-apple-user-partition": expectResponse.newPartition },
+          headers: {
+            get: (headerName: string) => {
+              if (headerName.toLowerCase() === "x-apple-user-partition") {
+                return expectResponse.newPartition;
+              }
+              return null;
+            },
+          },
+          json: () => Promise.resolve({}),
+        });
+      }
+
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(expectResponse),
+      });
+    }) as jest.Mock;
+
+    const actual = await getWebstream(mockPartition, mockToken);
+
+    expect(actual).toStrictEqual(expectResponse);
+  });
+
+  test("Give Apple API move location (http status 330) and response error, then should return correct data.", async () => {
+    const mockPartition = "72";
+    const mockToken = "B1AG6XBub2QnCol";
+    const newPartition = "179";
+
+    global.fetch = jest.fn((url) => {
+      if (
+        url ===
+        `https://p${mockPartition}-sharedstreams.icloud.com/${mockToken}/sharedstreams/webstream`
+      ) {
+        return Promise.resolve({
+          ok: false,
+          status: 330,
+          Headers: { "x-apple-user-partition": newPartition },
+          headers: {
+            get: (headerName: string) => {
+              if (headerName.toLowerCase() === "x-apple-user-partition") {
+                return newPartition;
+              }
+              return null;
+            },
+          },
+          json: () => Promise.resolve({}),
+        });
+      }
+
+      return Promise.resolve({
+        ok: false,
+        json: () => "Error",
+      });
+    }) as jest.Mock;
+
+    const actual = await getWebstream(mockPartition, mockToken);
+
+    expect(actual).toBe(null);
+  });
 });

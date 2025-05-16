@@ -1,5 +1,6 @@
 export type WebstreamResponse = {
   photos: Photo[];
+  newPartition?: string;
 };
 
 export type Photo = {

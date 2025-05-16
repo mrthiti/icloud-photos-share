@@ -125,4 +125,41 @@ describe("icloudPhotosShare() function", () => {
     );
     expect(actual.error).toBe(true);
   });
+
+  test("Give apple move location, then should currect data.", async () => {
+    const mockToken = "B1AG6XBub2QnCol";
+    const mockPartition = "72";
+    const expectScheme =
+      mockGetWebasseturls.locations["cvws.icloud-content.com"].scheme;
+    const expectHost =
+      mockGetWebasseturls.locations["cvws.icloud-content.com"].hosts[0];
+    const expectUrlPath =
+      mockGetWebasseturls.items["01e7cfcf25ea502b67552bf64a4270fa2990e5cc79"]
+        .url_path;
+    const expectMediaUrl = `${expectScheme}://${expectHost}${expectUrlPath}`;
+    const expectMediaType = mockGetWebstream.photos[0].mediaAssetType;
+    const newMockGetWebstream = { ...mockGetWebstream, newPartition: "179" };
+
+    getPartitionFromToken.mockImplementation(() => mockPartition);
+    getWebstream.mockImplementation(() => Promise.resolve(newMockGetWebstream));
+    getWebasseturls.mockImplementation(() =>
+      Promise.resolve(mockGetWebasseturls)
+    );
+
+    const actual = await icloudPhotosShare(mockToken);
+
+    expect(getPartitionFromToken).toHaveBeenCalledWith(mockToken);
+    expect(getWebstream).toHaveBeenCalledWith(mockPartition, mockToken);
+    expect(getWebasseturls).toHaveBeenCalledWith(
+      newMockGetWebstream.newPartition,
+      mockToken,
+      newMockGetWebstream.photos.map((it: WebstreamPhoto) => it.photoGuid)
+    );
+    expect(
+      !actual.error && actual.data.photos[0]?.derivatives["2049"].mediaUrl
+    ).toBe(expectMediaUrl);
+    expect(!actual.error && actual.data.photos[0]?.mediaAssetType).toBe(
+      expectMediaType
+    );
+  });
 });

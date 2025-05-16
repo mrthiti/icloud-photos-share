@@ -13,7 +13,20 @@ export const getWebstream = async (
     },
     body: JSON.stringify({ streamCtag: null }),
   }).catch(() => null);
-  if (!response?.ok) return null;
+
+  if (!response?.ok) {
+    const newPartition =
+      response?.headers?.get("x-apple-user-partition") || "0";
+
+    if (response?.status === 330) {
+      const responseSecond = await getWebstream(newPartition, token);
+      return responseSecond
+        ? ({ ...responseSecond, newPartition } as WebstreamResponse)
+        : null;
+    }
+
+    return null;
+  }
 
   return response.json();
 };

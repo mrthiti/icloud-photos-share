@@ -19,7 +19,7 @@ export async function icloudPhotosShare(
   }
 
   const resWebasseturls = await getWebasseturls(
-    partition,
+    resWebstream.newPartition ?? partition,
     token,
     resWebstream.photos.map((it: WebstreamPhoto) => it.photoGuid)
   );
