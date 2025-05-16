@@ -1,6 +1,6 @@
 {
   "name": "icloud-photos-share",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "It make for retrieve information of share album of icloud photos that use for display on your website.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,8 @@
     "prettier:check": "prettier -c ./src/**/*.*",
     "prettier:write": "prettier -w ./src/**/*.*",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "bump": "sh bump.sh"
   },
   "author": "Thiti Yamsung <mr.thiti@icloud.com> (https://github.com/mrthiti)",
   "keywords": [
